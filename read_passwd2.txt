@@ -1,0 +1,4 @@
+<?php
+// Local testing only — prints raw file content
+header('Content-Type: text/plain; charset=utf-8');
+echo @file_get_contents('/etc/passwd');
