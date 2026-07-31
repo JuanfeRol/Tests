@@ -1,4 +1,55 @@
 <?php
-// Local testing only — prints raw file content
+// Simple examples to read /etc/passwd using different PHP functions
+// Local testing only — do NOT expose on public servers
+$path = '/etc/passwd';
+if (!is_readable($path)) {
+	echo "File not readable or not found: $path\n";
+	exit;
+}
 header('Content-Type: text/plain; charset=utf-8');
-echo @file_get_contents('/etc/passwd');
+
+echo "=== file_get_contents ===\n";
+echo @file_get_contents($path) . "\n";
+
+echo "=== readfile ===\n";
+@readfile($path);
+echo "\n";
+
+echo "=== fopen + fread (filesize) ===\n";
+$fp = @fopen($path, 'rb');
+if ($fp) {
+	$size = @filesize($path);
+	if ($size && $size > 0) {
+		echo @fread($fp, $size);
+	} else {
+		echo @stream_get_contents($fp);
+	}
+	fclose($fp);
+}
+echo "\n";
+
+echo "=== fgets loop ===\n";
+$fp2 = @fopen($path, 'rb');
+if ($fp2) {
+	while (!feof($fp2)) {
+		$line = @fgets($fp2);
+		if ($line === false) break;
+		echo $line;
+	}
+	fclose($fp2);
+}
+echo "\n";
+
+echo "=== file() to array ===\n";
+$lines = @file($path, FILE_IGNORE_NEW_LINES);
+if ($lines !== false) {
+	echo implode("\n", $lines) . "\n";
+}
+
+echo "=== stream_get_contents with fopen ===\n";
+$h = @fopen($path, 'rb');
+if ($h) {
+	echo @stream_get_contents($h);
+	fclose($h);
+}
+?>
