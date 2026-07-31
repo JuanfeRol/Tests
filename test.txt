@@ -1,8 +1,0 @@
-<html>
-<body>
-<?php 
-echo shell_exec('whoami');
-echo system('whoami');
-?>
-</body>
-</html>
