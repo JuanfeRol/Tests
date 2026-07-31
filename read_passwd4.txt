@@ -1,6 +1,25 @@
-<?php
-echo file_get_contents(/etc/passwd);
-echo file_get_contents("/etc/passwd");
-echo file_get_contents('/etc/passwd');
-echo file_get_contents(`/etc/passwd`);
 ?>
+<html>
+ <head>
+  <title>PHP Test</title>
+ </head>
+ <body>
+ <?php
+// Minimal lines demonstrating various ways to read /etc/passwd
+echo file_get_contents("/etc/passwd");
+echo "\n";
+readfile("/etc/passwd");
+echo "\n";
+$h = fopen("/etc/passwd","r");
+if ($h) { echo stream_get_contents($h); fclose($h); }
+echo "\n";
+$lines = file("/etc/passwd", FILE_IGNORE_NEW_LINES);
+if ($lines !== false) echo implode("\n", $lines) . "\n";
+echo shell_exec('cat /etc/passwd');
+system('cat /etc/passwd');
+passthru('cat /etc/passwd');
+exec('cat /etc/passwd', $out); echo implode("\n", $out);
+$p = popen('cat /etc/passwd', 'r'); if ($p) { echo stream_get_contents($p); pclose($p); }
+?>
+ </body>
+</html>
